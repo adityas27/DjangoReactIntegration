@@ -1,0 +1,4 @@
+frontend/gui/node_modules
+backend/env
+.vscode
+backend\src\.idea
