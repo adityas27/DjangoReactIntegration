@@ -1,28 +1,49 @@
-import React,  { Component } from "react";
-import axios from "axios";
-import { Card } from "antd";
+import React from 'react';
+import axios from 'axios';
 
-export default class ArticleDetail extends Component{
-  state = {
-    article: {}
-  };
+import { Button, Card } from 'antd';
 
-  componentDidMount() {
-    const articleID = this.props.match.params.articleID;
-    axios.get(`http://127.0.0.1:8000/api/${articleID}`).then(res => {
-      this.setState({
-        article: res.data
-      });
-      console.log(this.state.article)
-    });
-  }
-      render() {
-    return (
-      <div>
-        <Card title={this.state.article.title}>
-          <p> {this.state.article.content} </p>
-        </Card>
-      </div>
-    );
-  }
+import CustomForm from '../components/Form';
+
+class ArticleDetail extends React.Component {
+
+    state = {
+        article: {}
+    }
+
+    componentDidMount() {
+        const articleID = this.props.match.params.articleID;
+        axios.get(`http://127.0.0.1:8000/api/${articleID}`)
+            .then(res => {
+                this.setState({
+                    article: res.data
+                });
+            })
+    }
+
+    handleDelete = (event) => {
+        const articleID = this.props.match.params.articleID;
+        axios.delete(`http://127.0.0.1:8000/api/${articleID}`);
+        this.props.history.push('/');
+        this.forceUpdate();
+    }
+
+    render() {
+        return (
+            <div>
+                <Card title={this.state.article.title} extra={<form onSubmit={this.handleDelete}>
+                    <Button type="danger" htmlType="submit">Delete</Button>
+                </form>}>
+                    <p>{this.state.article.content}</p>
+                </Card>
+                <br />
+                <CustomForm
+                    requestType="put"
+                    articleID={this.props.match.params.articleID}
+                    btnText="Update" />
+            </div>
+        )
+    }
 }
+
+export default ArticleDetail;

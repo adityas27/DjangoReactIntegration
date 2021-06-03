@@ -7,7 +7,8 @@ import BaseRouter from './routes';
 
 class App extends Component {
   render()
-  {return (
+  {
+    return (
     <>
       <Router>
           <CustomLayout>
